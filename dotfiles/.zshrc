@@ -47,7 +47,7 @@ function gcai() {
     --spinner moon \
     --title "Generating commit…" \
     --show-output \
-    -- /Users/raduan/.claude/local/claude --model "sonnet" -p \
+    -- /Users/raduan/.claude/local/claude --model "claude-haiku-4-5" -p \
     "look at the changes that I have staged, and write a one liner commit message for these changes, based on conventionalcommits 1.0 styleguide. use format: <emoji> type(scope): <one-sentence-summary>. put a unique emoji in the beginning that reflects the change the closest, and add a space between it and type(scope) that follows. YOU MUST OUTPUT ONLY THE ONE LINER COMMIT MESSAGE IN REQUESTED FORMAT."
   )
 
