@@ -254,33 +254,36 @@ skill-name/
 ```markdown
 ---
 name: skill-name
-description: [description including dependencies]
+description: [description with what it does and when to use]
 ---
 
 # Skill Name
 
 ## Requirements
 
-```bash
-pip install package1 package2
-```
+Scripts use `uv` for dependency management. Dependencies are declared inline using PEP 723 metadata.
 
 ## Instructions
 
 1. Process input using the helper script
-2. Run with: `python scripts/processor.py <args>`
+2. Run with: `uv run scripts/processor.py <args>`
 3. Handle output/results
 
 ## Script Usage
 
 **Basic usage:**
 ```bash
-python scripts/processor.py input.txt
+uv run scripts/processor.py input.txt
 ```
 
 **With options:**
 ```bash
-python scripts/processor.py input.txt -o output.txt --verbose
+uv run scripts/processor.py input.txt -o output.txt --verbose
+```
+
+Or if executable:
+```bash
+./scripts/processor.py input.txt
 ```
 
 ## Examples
@@ -332,21 +335,35 @@ For advanced usage, see [REFERENCE.md](REFERENCE.md).
 
 **File:** `scripts/[name].py`
 
+**IMPORTANT: Always use uv with PEP 723 inline metadata for self-contained, portable scripts.**
+
 ```python
-#!/usr/bin/env python3
+#!/usr/bin/env -S uv run
+# /// script
+# requires-python = ">=3.12"
+# dependencies = [
+#     "package-name>=1.0.0",
+#     "another-package>=2.0.0",
+# ]
+# ///
 """
 [Script purpose - one line]
 
 Usage:
-    python scripts/[name].py <input> [options]
+    uv run scripts/[name].py <input> [options]
+    ./scripts/[name].py <input> [options]  # if executable
 
 Description:
     [Detailed description of what this script does]
     [Mention key features or behavior]
 
+Dependencies:
+    Dependencies are declared inline using PEP 723 metadata.
+    uv will automatically install them when the script runs.
+
 Examples:
-    python scripts/[name].py data.txt
-    python scripts/[name].py data.txt -o output.json --verbose
+    uv run scripts/[name].py data.txt
+    uv run scripts/[name].py data.txt -o output.json --verbose
 """
 
 import argparse
@@ -394,8 +411,8 @@ def main():
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
 Examples:
-  python scripts/[name].py input.txt
-  python scripts/[name].py input.txt -o output.txt --verbose
+  uv run scripts/[name].py input.txt
+  uv run scripts/[name].py input.txt -o output.txt --verbose
         """
     )
 
@@ -597,29 +614,32 @@ allowed-tools: Read, Write, Edit, Glob, Grep
 
 **Characteristics:**
 - Custom data transformation
-- Python script for heavy lifting
-- May have dependencies
+- Python script for heavy lifting (using uv)
+- Self-contained with inline dependencies
 
 **Example:**
 ```yaml
 ---
 name: csv-analyzer
-description: Analyze CSV files, generate statistics, detect data quality issues, and create visualizations. Use when working with CSV files, data analysis, or spreadsheet data. Requires pandas and matplotlib.
+description: Analyze CSV files, generate statistics, detect data quality issues, and create visualizations. Use when working with CSV files, data analysis, or spreadsheet data.
 ---
 
 # CSV Analyzer
 
 ## Requirements
 
-```bash
-pip install pandas matplotlib
-```
+The script uses `uv` for dependency management. Dependencies are declared inline using PEP 723 metadata.
 
 ## Instructions
 
 1. Use the analysis script:
    ```bash
-   python scripts/analyze_csv.py data.csv
+   uv run scripts/analyze_csv.py data.csv
+   ```
+
+   Or if executable:
+   ```bash
+   ./scripts/analyze_csv.py data.csv
    ```
 
 2. Script provides:
@@ -630,7 +650,7 @@ pip install pandas matplotlib
 
 3. Optional visualization:
    ```bash
-   python scripts/analyze_csv.py data.csv --plot
+   uv run scripts/analyze_csv.py data.csv --plot
    ```
 
 ## Examples
@@ -978,6 +998,13 @@ allowed-tools: WebFetch, WebSearch, Read
 - Complex parsing or transformation
 - Specialized algorithms
 - Performance-critical operations
+
+**Python Script Requirements:**
+- ALWAYS use `uv run` with PEP 723 inline metadata
+- Scripts must be self-contained and portable
+- No separate requirements.txt or virtual environments
+- Include `#!/usr/bin/env -S uv run` shebang
+- Declare dependencies in `# /// script` block
 
 **NO - Skip scripts when:**
 - Teaching Claude how to use existing tools

@@ -203,18 +203,29 @@ pip install package1 package2
 
 **5.3 - Create scripts if needed:**
 
-If the user wants Python scripts, create with this pattern:
+If the user wants Python scripts, create self-contained scripts that use `uv` for dependency management.
+
+**IMPORTANT: Python scripts must be self-contained and runnable via `uv run`**
 
 ```python
-#!/usr/bin/env python3
+#!/usr/bin/env -S uv run
+# /// script
+# requires-python = ">=3.12"
+# dependencies = [
+#     "package-name>=1.0.0",
+# ]
+# ///
 """
 [Script purpose]
 
 Usage:
-    python scripts/[name].py [arguments]
+    uv run scripts/[name].py [arguments]
 
 Description:
     [What this script does]
+
+Dependencies are managed via inline metadata (PEP 723).
+uv will automatically install dependencies when the script runs.
 """
 
 import argparse
@@ -241,6 +252,13 @@ if __name__ == "__main__":
         print(f"Error: {e}", file=sys.stderr)
         sys.exit(1)
 ```
+
+**Key points for uv-based scripts:**
+- Use `#!/usr/bin/env -S uv run` shebang
+- Include PEP 723 inline metadata with dependencies
+- Scripts are self-contained and portable
+- No need for separate requirements.txt or virtual environments
+- Users run with: `uv run scripts/name.py` or just `./scripts/name.py` (if executable)
 
 **5.4 - Create REFERENCE.md if complex:**
 
@@ -302,16 +320,20 @@ For skills with extensive APIs or detailed workflows, create REFERENCE.md with:
 ### Script Guidelines (When Needed)
 ✓ **DO:**
 - Emphasize Python for most tooling (user preference)
+- Use `uv run` for all Python scripts with PEP 723 inline metadata
+- Make scripts self-contained and portable
 - Add proper argument parsing
 - Include error handling
-- Document usage in docstrings
+- Document usage in docstrings with `uv run` commands
 - Show script invocation in SKILL.md
 
 ✗ **DON'T:**
+- Use traditional pip/venv (always use uv)
 - Create scripts that just call existing tools
 - Skip error handling
 - Forget to make scripts executable
 - Hide script usage from SKILL.md
+- Create separate requirements.txt files (use inline metadata)
 
 ## Iteration and Refinement
 
