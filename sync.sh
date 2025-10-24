@@ -119,6 +119,16 @@ main() {
     fi
     echo ""
 
+    # Sync Claude skills directory
+    log_info "Syncing Claude skills..."
+    if [ -d "$SCRIPT_DIR/skills" ]; then
+        create_symlink "$SCRIPT_DIR/skills" "$HOME/.claude/skills" "Linked: ~/.claude/skills → repo" || overall_status=1
+    else
+        log_warning "Directory not found: skills"
+        overall_status=1
+    fi
+    echo ""
+
     # Verify everything is working
     log_info "Verifying symlinks..."
     local verify_failed=0
@@ -152,6 +162,23 @@ main() {
         fi
     else
         log_error "~/.claude/commands is not a symlink"
+        verify_failed=1
+    fi
+
+    # Check Claude skills directory
+    if [ -L "$HOME/.claude/skills" ]; then
+        local skills_target=$(readlink "$HOME/.claude/skills")
+        if [[ "$skills_target" == "$SCRIPT_DIR/skills" ]] && [ -e "$HOME/.claude/skills" ]; then
+            # Count skill directories (each skill should have a SKILL.md)
+            local skill_count=$(find "$HOME/.claude/skills" -maxdepth 2 -name "SKILL.md" 2>/dev/null | wc -l | tr -d ' ')
+            log_success "~/.claude/skills correctly linked ($skill_count skills available)"
+        else
+            log_error "~/.claude/skills symlink is broken or points to wrong location"
+            log_error "  Target: $skills_target"
+            verify_failed=1
+        fi
+    else
+        log_error "~/.claude/skills is not a symlink"
         verify_failed=1
     fi
 
