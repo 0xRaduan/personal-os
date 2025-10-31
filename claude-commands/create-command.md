@@ -23,7 +23,7 @@ Create a new custom slash command: **/$1** with description: **$2**
 description: Clear, concise description of what the command does
 argument-hint: "Expected arguments with examples"
 allowed-tools: ["Read", "Write", "Bash"]  # Optional: restrict tool access
-model: "claude-3-5-sonnet-20241022"      # Optional: specify model
+model: "claude-4-5-haiku"      # Optional: specify model
 ---
 ```
 
@@ -60,7 +60,7 @@ ${ARGUMENTS:-Perform general analysis of the codebase}
 
 ### **Argument Best Practices:**
 - **Use descriptive names** in argument-hint
-- **Provide defaults** for optional arguments  
+- **Provide defaults** for optional arguments
 - **Handle empty arguments** gracefully
 - **Give usage examples** in the description
 
@@ -93,7 +93,7 @@ Map out the **full workflow** from start to finish:
 ```markdown
 ## Complete User Journey:
 1. **Input Analysis** - Examine provided requirements/files
-2. **Planning** - Determine approach and identify dependencies  
+2. **Planning** - Determine approach and identify dependencies
 3. **Implementation** - Create/modify code following patterns
 4. **Validation** - Test functionality and check quality
 5. **Documentation** - Update relevant docs and examples
@@ -112,7 +112,7 @@ Break complex tasks into **discrete, actionable steps**:
 - Identify current patterns and conventions
 - Note dependencies and imports
 
-### Step 2: Planning  
+### Step 2: Planning
 - Design component interface based on requirements
 - Plan file structure and naming
 - Identify testing approach

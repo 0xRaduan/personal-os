@@ -19,7 +19,6 @@ source /usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 alias vim='/usr/local/bin/Vim'
 
 export PATH=/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/Library/Apple/usr/bin
-export PATH=~/go/bin:$PATH
 export PATH="/Users/raduan/.local/bin:$PATH"
 
 export NVM_DIR="$HOME/.nvm"
